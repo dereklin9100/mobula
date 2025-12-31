@@ -1,0 +1,37 @@
+{
+  "login": {
+    "title": "Welcome back",
+    "subtitle": "Login to your account",
+
+    "form": {
+      "email": {
+        "label": "Email",
+        "placeholder": "m@example.com"
+      },
+      "password": {
+        "label": "Password",
+        "forgot": "Forgot your password?"
+      },
+      "submit": "Login"
+    },
+
+    "social": {
+      "separator": "Or continue with",
+      "apple": "Login with Apple",
+      "google": "Login with Google",
+      "meta": "Login with Meta"
+    },
+
+    "footer": {
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up"
+    },
+
+    "legal": {
+      "prefix": "By clicking continue, you agree to our",
+      "terms": "Terms of Service",
+      "and": "and",
+      "privacy": "Privacy Policy"
+    }
+  }
+}

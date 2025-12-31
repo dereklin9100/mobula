@@ -1,0 +1,16 @@
+{
+    "name": "@repo/tailwind-config",
+    "version": "0.0.0",
+    "private": true,
+    "exports": {
+        "./base.css": "./base.css",
+        "./tailwind.config": "./tailwind.config.ts"
+    },
+    "files": [
+        "theme.css",
+        "tailwind.config.ts"
+    ],
+    "sideEffects": [
+        "**/*.css"
+    ]
+}

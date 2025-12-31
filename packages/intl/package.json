@@ -1,0 +1,9 @@
+{
+  "name": "@repo/intl",
+  "private": true,
+  "types": "src/index.ts",
+  "exports": {
+    "./messages/*": "./src/messages/*",
+    ".": "./src/index.ts"
+  }
+}

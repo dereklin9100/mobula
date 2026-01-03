@@ -1,0 +1,101 @@
+# 生产环境优化版本 - Optimized for production
+# =====================================================================
+# 此文件用于生产环境部署，镜像大小更小，启动更快
+# This file is optimized for production deployment with smaller image size
+#
+# 构建命令 | Build Commands:
+# docker build -f Dockerfile.prod -t mobula-web:prod --target runner-web .
+# docker run -p 3000:3000 mobula-web:prod
+#
+# =====================================================================
+
+FROM node:18-alpine AS base
+
+WORKDIR /app
+RUN npm install -g pnpm@9.0.0
+
+# =====================================================================
+# Dependencies builder
+# =====================================================================
+FROM base AS dependencies
+
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+COPY packages ./packages
+COPY apps ./apps
+
+RUN pnpm install --frozen-lockfile
+
+# =====================================================================
+# Builder - Build source code
+# =====================================================================
+FROM dependencies AS builder
+
+RUN pnpm build
+
+# =====================================================================
+# Production - Web application
+# =====================================================================
+FROM base AS runner-web
+
+ENV NODE_ENV=production
+
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+
+# Copy built packages from builder
+COPY --from=builder /app/packages ./packages
+COPY --from=builder /app/apps/web ./apps/web
+
+# Install only production dependencies
+RUN pnpm install --frozen-lockfile --prod --filter=web && \
+    pnpm prune --prod
+
+EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+
+CMD ["pnpm", "start", "--filter=web"]
+
+# =====================================================================
+# Production - Login application
+# =====================================================================
+FROM base AS runner-login
+
+ENV NODE_ENV=production
+
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+
+COPY --from=builder /app/packages ./packages
+COPY --from=builder /app/apps/login ./apps/login
+
+RUN pnpm install --frozen-lockfile --prod --filter=login && \
+    pnpm prune --prod
+
+EXPOSE 3001
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3001', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+
+CMD ["pnpm", "start", "--filter=login"]
+
+# =====================================================================
+# Production - Dashboard application
+# =====================================================================
+FROM base AS runner-dashboard
+
+ENV NODE_ENV=production
+
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+
+COPY --from=builder /app/packages ./packages
+COPY --from=builder /app/apps/dashboard ./apps/dashboard
+
+RUN pnpm install --frozen-lockfile --prod --filter=dashboard && \
+    pnpm prune --prod
+
+EXPOSE 3002
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3002', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+
+CMD ["pnpm", "start", "--filter=dashboard"]

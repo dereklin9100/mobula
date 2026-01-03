@@ -1,0 +1,79 @@
+# Dependencies and package management
+node_modules/
+pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpmfile.cjs
+.npmrc
+.yarnrc
+
+# Build outputs
+.next
+dist
+build
+out
+.turbo
+
+# Development and environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.example
+
+# IDEs and editors
+.idea/
+.vscode/
+.vscode-server/
+.vim
+.emacs
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# Git and version control
+.git/
+.gitignore
+.gitattributes
+.github/
+.gitlab-ci.yml
+.hg/
+.svn/
+
+# CI/CD
+.travis.yml
+.circleci/
+.jenkins/
+appveyor.yml
+azure-pipelines.yml
+
+# Testing and coverage
+coverage/
+.nyc_output
+test-results
+junit.xml
+
+# Documentation and metadata
+docs/
+README*
+CHANGELOG*
+LICENSE
+*.md
+.editorconfig
+.prettierignore
+.eslintignore
+
+# Workspace and project files
+turbo.json
+.turbo/
+.next/cache/
+next-env.d.ts
+

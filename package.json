@@ -1,5 +1,9 @@
 {
   "name": "mobula",
+  "version": "1.0.0",
+  "description": "A modern web application platform",
+  "license": "MIT",
+  "author": "Mobula Project",
   "private": true,
   "scripts": {
     "build": "turbo run build",

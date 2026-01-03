@@ -29,6 +29,20 @@ It is designed for **multi-app, multi-language, long-term scalable projects**.
 
 ---
 
+## 📘 Documentation | 文档
+
+**完整的项目文档已准备好！👇**
+
+### 🇨🇳 中文用户 | 🇬🇧 English Users
+
+- **[📌 文档中心](./docs/README.md)** - 一站式文档导航中心
+- **[⚡ 快速开始](./docs/deployment/DEPLOYMENT_README.md)** (3 分钟) / [Quick Start](./docs/deployment/DEPLOYMENT_README_EN.md) (3 min)
+- **[🏗️ 架构设计](./docs/architecture/ARCHITECTURE.md)** (30-40 分钟) / [Architecture Guide](./docs/architecture/ARCHITECTURE_EN.md) (30-40 min)
+- **[🐳 Docker 教程](./docs/deployment/DOCKER_GUIDE.md)** (15-20 分钟) / [Docker Guide](./docs/deployment/DOCKER_GUIDE_EN.md) (15-20 min)
+- **[☸️ Kubernetes 教程](./docs/deployment/k8s/README.md)** (20-30 分钟) / [K8s Guide](./docs/deployment/k8s/README_EN.md) (20-30 min)
+
+---
+
 ## 🚀 Key Features | 核心特性
 
 ### 🧱 Monorepo Architecture
@@ -106,12 +120,11 @@ pnpm dev --filter=login
 
 ---
 
-## 📘 Documentation | 文档
+## 🧭 Guide | 指南
 
-* 📖 **Chinese (详细中文指南)**
+* 📖 **Chinese (中文指南)**
   👉 [`README_ZH.md`](./README_ZH.md)
-
-* 📖 **English (Detailed English Guide)**
+* 📖 **English (English Guide)**
   👉 [`README_EN.md`](./README_EN.md)
 
 The detailed docs include:
@@ -137,4 +150,3 @@ The detailed docs include:
 MIT
 
 ---
-

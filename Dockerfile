@@ -23,7 +23,7 @@
 #
 # =====================================================================
 
-FROM node:18-alpine AS builder
+FROM node:22 AS builder
 
 WORKDIR /app
 
@@ -31,7 +31,7 @@ WORKDIR /app
 RUN npm install -g pnpm@9.0.0
 
 # 复制工作区配置 | Copy workspace configuration
-COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json turbo.json ./
 
 # 复制所有包和应用 | Copy all packages and apps
 COPY packages ./packages
@@ -46,7 +46,7 @@ RUN pnpm build
 # =====================================================================
 # Web应用 (端口 3000)
 # =====================================================================
-FROM node:18-alpine AS runner-web
+FROM node:22 AS runner-web
 
 WORKDIR /app
 
@@ -54,20 +54,21 @@ RUN npm install -g pnpm@9.0.0
 
 ENV NODE_ENV=production
 
-COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml turbo.json ./
 COPY --from=builder /app/packages ./packages
 COPY --from=builder /app/apps/web ./apps/web
+COPY --from=builder /app/node_modules ./node_modules
 
-RUN pnpm install --frozen-lockfile --prod --filter=web
+RUN pnpm install --frozen-lockfile --filter=web
 
 EXPOSE 3000
 
-CMD ["pnpm", "start", "--filter=web"]
+CMD ["sh", "-c", "cd /app/apps/web && pnpm dlx next start -p 3000"]
 
 # =====================================================================
 # Login应用 (端口 3001)
 # =====================================================================
-FROM node:18-alpine AS runner-login
+FROM node:22 AS runner-login
 
 WORKDIR /app
 
@@ -75,20 +76,21 @@ RUN npm install -g pnpm@9.0.0
 
 ENV NODE_ENV=production
 
-COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml turbo.json ./
 COPY --from=builder /app/packages ./packages
 COPY --from=builder /app/apps/login ./apps/login
+COPY --from=builder /app/node_modules ./node_modules
 
-RUN pnpm install --frozen-lockfile --prod --filter=login
+RUN pnpm install --frozen-lockfile --filter=login
 
 EXPOSE 3001
 
-CMD ["pnpm", "start", "--filter=login"]
+CMD ["sh", "-c", "cd /app/apps/login && pnpm dlx next start -p 3001"]
 
 # =====================================================================
 # Dashboard应用 (端口 3002)
 # =====================================================================
-FROM node:18-alpine AS runner-dashboard
+FROM node:22 AS runner-dashboard
 
 WORKDIR /app
 
@@ -96,12 +98,13 @@ RUN npm install -g pnpm@9.0.0
 
 ENV NODE_ENV=production
 
-COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml turbo.json ./
 COPY --from=builder /app/packages ./packages
 COPY --from=builder /app/apps/dashboard ./apps/dashboard
+COPY --from=builder /app/node_modules ./node_modules
 
-RUN pnpm install --frozen-lockfile --prod --filter=dashboard
+RUN pnpm install --frozen-lockfile --filter=dashboard
 
 EXPOSE 3002
 
-CMD ["pnpm", "start", "--filter=dashboard"]
+CMD ["sh", "-c", "cd /app/apps/dashboard && pnpm dlx next start -p 3002"]

@@ -72,7 +72,6 @@ LICENSE
 .eslintignore
 
 # Workspace and project files
-turbo.json
 .turbo/
 .next/cache/
 next-env.d.ts

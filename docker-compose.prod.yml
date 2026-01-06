@@ -13,7 +13,7 @@ services:
       - NODE_ENV=production
     restart: always
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -44,7 +44,7 @@ services:
       - NODE_ENV=production
     restart: always
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"]
+      test: ["CMD", "curl", "-f", "http://localhost:3001"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -75,7 +75,7 @@ services:
       - NODE_ENV=production
     restart: always
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3002', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"]
+      test: ["CMD", "curl", "-f", "http://localhost:3002"]
       interval: 30s
       timeout: 10s
       retries: 3

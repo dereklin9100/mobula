@@ -11,8 +11,9 @@ Mobula 是一个基于 Turborepo 的 monorepo 模板，包含三个 Next.js 应�
 
 ### 1. Dockerfile (标准版) | Standard Version
 - 用于开发和生产环境
-- 镜像较大但构建时间较短
-- **推荐用于：开发环境、快速迭代**
+- **Base Image**: Node.js 22 (支持 Next.js 16)
+- 包含完整依赖确保运行时兼容性
+- **推荐用于：开发环境、生产部署**
 
 ```bash
 docker build -t mobula-web --target runner-web .
@@ -20,13 +21,16 @@ docker build -t mobula-web --target runner-web .
 
 ### 2. Dockerfile.prod (优化版) | Optimized Version
 - 为生产环境优化
-- 更小的镜像大小
-- 包含健康检查
-- **推荐用于：生产环境部署**
+- **Base Image**: Node.js 22
+- 包含健康检查和资源限制配置
+- 启动命令优化
+- **推荐用于：生产环境部署、资源受限场景**
 
 ```bash
 docker build -f Dockerfile.prod -t mobula-web:prod --target runner-web .
 ```
+
+> **注意**: 两个版本现在都使用 Node.js 22，以确保与 Next.js 16 的完整兼容性
 
 ## 单个应用部署 | Single App Deployment
 
@@ -184,8 +188,17 @@ docker build -t mobula-web --target builder --progress=plain .
 
 ## 常见问题 | FAQs
 
-### Q: 为什么镜像这么大？
-A: Node.js Alpine 镜像 + Next.js 编译产物 + 依赖。使用 Dockerfile.prod 可减小 20-30% 的大小。
+### Q: Node.js 18 与 Next.js 16 兼容吗？
+A: 不兼容。Next.js 16 要求 Node.js >=20.9.0。本项目已升级到 Node.js 22，确保完全兼容。
+
+### Q: 为什么镜像大小约为 800MB？
+A: Node.js 22 基础镜像 (~200MB) + Next.js 编译产物 (~150MB) + 完整依赖 (~450MB)。这是确保应用稳定运行所必需的。如需减小镜像，可考虑使用 distroless 基础镜像（需额外配置）。
+
+### Q: Dockerfile 中为什么要复制 turbo.json？
+A: turbo.json 是 Turborepo 的配置文件，构建时需要它来正确识别和构建工作区中的各个包。
+
+### Q: 为什么 runner 阶段要复制 node_modules？
+A: 为了确保 Next.js 在运行时有所有必需的依赖。即使是生产环境，Next.js 也需要某些开发时依赖（如编译器、打包器等）才能正常运行。
 
 ### Q: 如何在 Kubernetes 上部署？
 A: 将 docker-compose.yml 转换为 Kubernetes manifests，或使用 Kompose：

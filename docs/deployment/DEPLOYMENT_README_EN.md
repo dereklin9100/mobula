@@ -98,8 +98,8 @@ Mobula (Turborepo Monorepo)
 - `runner-dashboard`: Dashboard application
 
 ### Production Optimization
-- Alpine Linux base image (18MB)
-- Production dependencies only
+- Node.js 22 base image (ensures full Next.js 16 compatibility)
+- Complete runtime dependencies (ensures stable application execution)
 - Integrated health checks
 - Resource limits and requests
 - Log rotation configuration
@@ -111,13 +111,13 @@ Mobula (Turborepo Monorepo)
 
 ## Image Size Reference
 
-| Application | Size | Optimized |
-|-------------|------|-----------|
-| Web | ~500MB | ~200MB |
-| Login | ~500MB | ~200MB |
-| Dashboard | ~500MB | ~200MB |
+| Application | Size | Description |
+|-------------|------|-------------|
+| Web | ~800MB | Node.js 22 + Next.js + Full dependencies |
+| Login | ~800MB | Node.js 22 + Next.js + Full dependencies |
+| Dashboard | ~800MB | Node.js 22 + Next.js + Full dependencies |
 
-*Actual size depends on dependencies and source code size*
+*Actual size depends on dependencies and source code size. Full runtime dependencies are included to ensure proper Next.js 16 execution*
 
 ## Environment Variable Configuration
 

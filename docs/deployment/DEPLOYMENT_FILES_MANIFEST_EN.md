@@ -304,20 +304,24 @@ Encountering issues? Check relevant guide:
 ## 📝 Configuration File Quick Reference
 
 ### Dockerfile Key Information
-- **Base Image**: node:18-alpine
+- **Base Image**: node:22
 - **pnpm Version**: 9.0.0
-- **Node Version**: ≥18
+- **Node Version**: >=20.9.0 (Next.js 16 requirement)
 - **Build Targets**: builder, runner-web, runner-login, runner-dashboard
+- **Includes turbo.json**: Yes ✅
+- **Replica Dependencies**: Includes full node_modules (required for production)
 
 ### Dockerfile.prod Key Information
-- **Base Image**: node:18-alpine (smaller)
-- **Optimization**: Production dependencies + health checks
-- **Image Size**: ~200MB
+- **Base Image**: node:22
+- **Optimization**: Full dependencies + health checks
+- **Image Size**: ~800MB-1GB (full dependencies)
+- **Startup Command**: pnpm dlx next start -p <port>
 
 ### docker-compose Key Information
 - **Service Count**: 3 (web:3000, login:3001, dashboard:3002)
 - **Network**: Auto-created mobula network
 - **Restart Policy (prod)**: always
+- **Health Check**: curl -f http://localhost:<port>
 
 ### Kubernetes Key Information
 - **Namespace**: mobula

@@ -98,8 +98,8 @@ Mobula (Turborepo Monorepo)
 - `runner-dashboard`: Dashboard 应用
 
 ### 生产优化
-- Alpine Linux 基础镜像 (18MB)
-- 最小化依赖 (仅需生产依赖)
+- Node.js 22 基础镜像 (确保 Next.js 16 完全兼容)
+- 完整的运行时依赖 (确保应用稳定运行)
 - 内置健康检查
 - 资源限制和请求
 - 日志轮转配置
@@ -111,13 +111,13 @@ Mobula (Turborepo Monorepo)
 
 ## 镜像大小参考
 
-| 应用 | 大小 | 优化后 |
-|------|------|--------|
-| Web | ~500MB | ~200MB |
-| Login | ~500MB | ~200MB |
-| Dashboard | ~500MB | ~200MB |
+| 应用 | 大小 | 说明 |
+|------|------|------|
+| Web | ~800MB | Node.js 22 + Next.js + 完整依赖 |
+| Login | ~800MB | Node.js 22 + Next.js + 完整依赖 |
+| Dashboard | ~800MB | Node.js 22 + Next.js + 完整依赖 |
 
-*实际大小取决于依赖和源代码大小*
+*实际大小取决于依赖和源代码大小。为确保 Next.js 16 的正确运行，包含完整的运行时依赖*
 
 ## 环境变量配置
 

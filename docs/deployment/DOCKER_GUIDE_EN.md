@@ -11,8 +11,9 @@ Mobula is a Turborepo-based monorepo template containing three Next.js applicati
 
 ### 1. Dockerfile (Standard Version)
 - For development and production environments
-- Larger image but faster build time
-- **Recommended for: Development environment, rapid iteration**
+- **Base Image**: Node.js 22 (supports Next.js 16)
+- Includes full dependencies to ensure runtime compatibility
+- **Recommended for: Development environment, production deployment**
 
 ```bash
 docker build -t mobula-web --target runner-web .
@@ -20,13 +21,16 @@ docker build -t mobula-web --target runner-web .
 
 ### 2. Dockerfile.prod (Optimized Version)
 - Optimized for production environment
-- Smaller image size
-- Includes health checks
-- **Recommended for: Production deployment**
+- **Base Image**: Node.js 22
+- Includes health checks and resource limit configurations
+- Optimized startup command
+- **Recommended for: Production deployment, resource-constrained scenarios**
 
 ```bash
 docker build -f Dockerfile.prod -t mobula-web:prod --target runner-web .
 ```
+
+> **Note**: Both versions now use Node.js 22 to ensure full compatibility with Next.js 16
 
 ## Single Application Deployment
 
@@ -184,8 +188,17 @@ docker build -t mobula-web --target builder --progress=plain .
 
 ## Frequently Asked Questions
 
-### Q: Why is the image so large?
-A: Node.js Alpine image + Next.js compiled output + dependencies. Using Dockerfile.prod can reduce size by 20-30%.
+### Q: Is Node.js 18 compatible with Next.js 16?
+A: No. Next.js 16 requires Node.js >=20.9.0. This project has been upgraded to Node.js 22 to ensure full compatibility.
+
+### Q: Why is the image size approximately 800MB?
+A: Node.js 22 base image (~200MB) + Next.js compiled output (~150MB) + Full dependencies (~450MB). This is necessary to ensure stable application execution. To reduce image size, consider using distroless base images (requires additional configuration).
+
+### Q: Why is turbo.json needed in the Dockerfile?
+A: turbo.json is the Turborepo configuration file required during build to correctly identify and build each package in the workspace.
+
+### Q: Why does the runner stage need to copy node_modules?
+A: To ensure Next.js has all required dependencies at runtime. Even in production, Next.js needs certain development-time dependencies (like compilers, bundlers, etc.) to run properly.
 
 ### Q: How to deploy on Kubernetes?
 A: Convert docker-compose.yml to Kubernetes manifests, or use Kompose:
